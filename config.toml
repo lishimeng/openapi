@@ -9,3 +9,7 @@ port = 5432
 database = "open_api"
 ssl = "disable" #require/verify-full/verify-ca/disable
 
+[token]
+issuer = "thingple.com"
+expire = 24
+secret = "2lP2ybr5c3ZKjH2SlZk7krbrv8T9eFxQ"

@@ -9,6 +9,7 @@ import (
 	proxy "github.com/go-oauth2/oauth2/v4/server"
 	"github.com/go-oauth2/oauth2/v4/store"
 	"github.com/lishimeng/go-log"
+	"github.com/lishimeng/openapi/internal/etc"
 	"github.com/lishimeng/openapi/internal/store/sclient"
 	"sync"
 	"time"
@@ -39,7 +40,9 @@ func _initConfig() (res oauth2.Manager) {
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 	clientStore := sclient.New()
 	manager.MapClientStorage(clientStore)
-	manager.MapAccessGenerate(generates.NewJWTAccessGenerate("", []byte("00000000"), jwt.SigningMethodHS512))
+	manager.MapAccessGenerate(generates.NewJWTAccessGenerate(etc.Config.Token.Issuer, []byte(etc.Config.Token.Secret), jwt.SigningMethodHS256))
+	// config: expire
+	manager.SetAuthorizeCodeExp(time.Hour*time.Duration(etc.Config.Token.Expire))
 	res = manager
 	return
 }
